@@ -126,6 +126,9 @@ public class MyLinkedList<E> extends AbstractSequentialList<E> {
             
             node = next;
         }
+
+        fake.prev = fake;
+        fake.next = fake;
     }
     
     @Override
