@@ -5,31 +5,31 @@ import java.util.ConcurrentModificationException;
 import java.util.ListIterator;
 import java.util.NoSuchElementException;
 
-public class MyLinkedList<E> extends AbstractSequentialList<E> {
-    private final Node<E> fake;
+public class DummyLinkedList<E> extends AbstractSequentialList<E> {
+    private final Node<E> dummy;
     private int size;
     private int modCount;
     
-    public MyLinkedList() {
-        fake = new Node<>();
-        fake.prev = fake;
-        fake.next = fake;
+    public DummyLinkedList() {
+        dummy = new Node<>();
+        dummy.prev = dummy;
+        dummy.next = dummy;
         
         size = 0;
         modCount = 0;
     }
     
     public void addFirst(E e) {
-        Node<E> prev = fake;
-        Node<E> next = fake.next;
+        Node<E> prev = dummy;
+        Node<E> next = dummy.next;
         Node<E> newFirst = new Node<>(prev, e, next);
         
         link(prev, newFirst, next);
     }
     
     public void addLast(E e) {
-        Node<E> prev = fake.prev;
-        Node<E> next = fake;
+        Node<E> prev = dummy.prev;
+        Node<E> next = dummy;
         Node<E> newLast = new Node<>(prev, e, next);
         
         link(prev, newLast, next);
@@ -57,21 +57,21 @@ public class MyLinkedList<E> extends AbstractSequentialList<E> {
         if (size == 0) {
             throw new NoSuchElementException();
         }
-        return unlink(fake.next);
+        return unlink(dummy.next);
     }
     
     public E removeLast() {
         if (size == 0) {
             throw new NoSuchElementException();
         }
-        return unlink(fake.prev);
+        return unlink(dummy.prev);
     }
     
     @Override
     public boolean remove(Object o) {
-        Node<E> node = fake.next;
+        Node<E> node = dummy.next;
         if (o == null) {
-            while (node != fake) {
+            while (node != dummy) {
                 if (null == node.value) {
                     unlink(node);
                     return true;
@@ -79,7 +79,7 @@ public class MyLinkedList<E> extends AbstractSequentialList<E> {
                 node = node.next;
             }
         } else {
-            while (node != fake) {
+            while (node != dummy) {
                 if (o.equals(node.value)) {
                     unlink(node);
                     return true;
@@ -116,8 +116,8 @@ public class MyLinkedList<E> extends AbstractSequentialList<E> {
     
     @Override
     public void clear() {
-        Node<E> node = fake.next;
-        while (node != fake) {
+        Node<E> node = dummy.next;
+        while (node != dummy) {
             Node<E> next = node.next;
             
             node.value = null;
@@ -126,9 +126,9 @@ public class MyLinkedList<E> extends AbstractSequentialList<E> {
             
             node = next;
         }
-
-        fake.prev = fake;
-        fake.next = fake;
+        
+        dummy.prev = dummy;
+        dummy.next = dummy;
     }
     
     @Override
@@ -193,12 +193,12 @@ public class MyLinkedList<E> extends AbstractSequentialList<E> {
         // assert index >= 0 && index <= size
         Node<E> node;
         if (index < (size >> 1)) {
-            node = fake.next;
+            node = dummy.next;
             while (index-- > 0) {
                 node = node.next;
             }
         } else {
-            node = fake;
+            node = dummy;
             while (index++ < size) {
                 node = node.prev;
             }
